@@ -64,7 +64,7 @@ To use the Nepali Radio Player, follow these steps:
 
 ## Contributing
 
-Contributions to the Nepali Radio Player project are welcome. If you have suggestions or improvements, please visit the [project repository](https://github.com/prchapagain.github.io/nepali-radio-player) and submit a pull request or open an issue.
+Contributions to the Nepali Radio Player project are welcome. If you have suggestions or improvements, please visit the [project repository](https://github.com/prchapagain/nepali-radio-player) and submit a pull request or open an issue.
 
 ## License
 
