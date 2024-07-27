@@ -1,8 +1,9 @@
-    // THIS JAVA MADE BY PR CHAPAGAIN//
+//THIS JSVS CODE BY PR CHAPAGAIN
+//YOU CAN FORK IN GITHUB//
 let currentStationIndex = 0;
 let currentlyPlayingButton = null;
 const stations = [
-    { name: "Radio Nepal", streamUrl: "https://stream1.radionepal.gov.np/live/" },
+     { name: "Radio Nepal", streamUrl: "https://stream1.radionepal.gov.np/live/" },
     { name: "Kantipur FM", streamUrl: "https://radio-broadcast.ekantipur.com/stream/" },
     { name: "Ujyalo 90 Network", streamUrl: "https://stream.zeno.fm/h527zwd11uquv" },
     { name: "Kalika FM", streamUrl: "http://kalika-stream.softnep.com:7740/;" },
@@ -55,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const button = document.createElement('button');
         button.className = 'like-button';
-        button.textContent = 'Play';
+        button.innerHTML = '<i class="fas fa-play"></i>';
         button.setAttribute('onclick', 'likeStation(this); event.stopPropagation();');
 
         li.appendChild(span);
@@ -67,12 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
     audio.play().then(() => {
         console.log('Autoplaying:', stations[currentStationIndex].name);
         document.getElementById('current-station').innerText = stations[currentStationIndex].name;
-        document.getElementById('play-pause').innerText = 'Pause';
+        document.getElementById('play-pause').innerHTML = '<i class="fas fa-pause"></i>';
         updateStationButton(currentStationIndex);
         document.getElementById('streaming-indicator').style.display = 'inline-block'; // Show indicator
     }).catch(e => {
         console.error('Autoplay blocked:', e);
-        document.getElementById('play-pause').innerText = 'Play';
+        document.getElementById('play-pause').innerHTML = '<i class="fas fa-play"></i>';
         document.getElementById('streaming-indicator').style.display = 'none'; // Hide indicator
     });
 
@@ -97,12 +98,12 @@ function toggleFMList() {
 function likeStation(button) {
     // Stop the currently playing station, if any
     if (currentlyPlayingButton && currentlyPlayingButton !== button) {
-        currentlyPlayingButton.innerText = 'Play';
+        currentlyPlayingButton.innerHTML = '<i class="fas fa-play"></i>';
         currentlyPlayingButton.style.backgroundColor = ''; // Reset to default color
     }
 
     // Update the clicked button to show it's playing
-    button.innerText = 'playing';
+    button.innerHTML = '<i class="fas fa-pause"></i>';
     button.style.backgroundColor = '#ff3b30';
 
     // Update the reference to the currently playing button
@@ -117,7 +118,7 @@ function playPause() {
     const playPauseButton = document.getElementById('play-pause');
     if (audio.paused) {
         audio.play().then(() => {
-            playPauseButton.innerText = 'Pause';
+            playPauseButton.innerHTML = '<i class="fas fa-pause"></i>';
             console.log('Playing:', stations[currentStationIndex].name);
             document.getElementById('streaming-indicator').style.display = 'inline-block'; // Show indicator
         }).catch(e => {
@@ -125,7 +126,7 @@ function playPause() {
         });
     } else {
         audio.pause();
-        playPauseButton.innerText = 'Play';
+        playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
         document.getElementById('streaming-indicator').style.display = 'none'; // Hide indicator
     }
 }
@@ -158,7 +159,7 @@ function updateStation() {
         document.getElementById('streaming-indicator').style.display = 'none'; // Hide indicator
     });
     document.getElementById('current-station').innerText = stations[currentStationIndex].name;
-    document.getElementById('play-pause').innerText = 'Pause';
+    document.getElementById('play-pause').innerHTML = '<i class="fas fa-pause"></i>';
     
     // Update the button text and color for the currently playing station
     updateStationButton(currentStationIndex);
@@ -168,12 +169,45 @@ function updateStationButton(index) {
     const buttons = document.querySelectorAll('.like-button');
     buttons.forEach((button, i) => {
         if (i === index) {
-            button.innerText = 'playing';
+            button.innerHTML = '<i class="fas fa-pause"></i>';
             button.style.backgroundColor = '#ff3b30';
             currentlyPlayingButton = button;
         } else {
-            button.innerText = 'Play';
+            button.innerHTML = '<i class="fas fa-play"></i>';
             button.style.backgroundColor = ''; // Reset to default color
         }
     });
 }
+
+let isMuted = false;
+
+function toggleMute() {
+    const volumeButton = document.getElementById('volume-icon');
+    if (isMuted) {
+        audio.muted = false;
+        volumeButton.className = audio.volume > 0.5 ? 'fas fa-volume-up' : 'fas fa-volume-down';
+    } else {
+        audio.muted = true;
+        volumeButton.className = 'fas fa-volume-mute';
+    }
+    isMuted = !isMuted;
+}
+
+function setVolume(level) {
+    audio.volume = level;
+    if (!audio.muted) {
+        const volumeButton = document.getElementById('volume-icon');
+        if (level === 0) {
+            volumeButton.className = 'fas fa-volume-mute';
+        } else if (level <= 0.5) {
+            volumeButton.className = 'fas fa-volume-down';
+        } else {
+            volumeButton.className = 'fas fa-volume-up';
+        }
+    }
+}
+
+// Volume control event listener
+document.getElementById('volume-slider').addEventListener('input', (event) => {
+    setVolume(event.target.value / 100);
+});
